@@ -1,7 +1,7 @@
 name: flutter_godot
 description: "Embed your Godot game into Flutter apps as a widget on Android."
 version: 0.0.1
-homepage: https://github.com/wyq0918dev/flutter_godot
+repository: https://github.com/wyq0918dev/flutter_godot
 
 environment:
   sdk: ^3.8.1
