@@ -1,0 +1,40 @@
+name: flutter_godot
+description: "Embed your Godot game into Flutter apps as a widget on Android."
+version: 0.0.1
+homepage: https://github.com/wyq0918dev/flutter_godot
+
+environment:
+  sdk: ^3.8.1
+  flutter: '>=3.3.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  web: ^1.0.0
+  plugin_platform_interface: ^2.0.2
+  flutter_plugin_android_lifecycle: ^2.0.26
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.wyq0918dev.flutter_godot
+        pluginClass: FlutterGodotPlugin
+      ios:
+        pluginClass: FlutterGodotPlugin
+      linux:
+        pluginClass: FlutterGodotPlugin
+      macos:
+        pluginClass: FlutterGodotPlugin
+      windows:
+        pluginClass: FlutterGodotPluginCApi
+      web:
+        pluginClass: FlutterGodotWeb
+        fileName: flutter_godot_web.dart
