@@ -25,6 +25,8 @@ import io.flutter.plugin.platform.PlatformViewFactory
 import org.godotengine.godot.Godot
 import org.godotengine.godot.GodotHost
 import org.godotengine.godot.plugin.GodotPlugin
+import org.godotengine.godot.plugin.SignalInfo
+import org.godotengine.godot.plugin.UsedByGodot
 import org.godotengine.godot.utils.ProcessPhoenix
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -106,11 +108,10 @@ class FlutterGodotPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
 
         override fun getHostPlugins(engine: Godot): MutableSet<GodotPlugin> {
             Log.v(TAG, "getHostPlugins")
-            return mutableSetOf(
-                GodotFlutterPlugin(
-                    godot = engine, flutter = this@FlutterGodotPlugin
-                )
-            )
+            return mutableSetOf<GodotPlugin>().apply {
+                addAll(super.getHostPlugins(engine))
+                add(mGodotPlugin)
+            }
         }
 
         override fun getCommandLine(): MutableList<String> {
@@ -118,6 +119,25 @@ class FlutterGodotPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
                 addAll(super.getCommandLine())
 //                add("--main-pack")
 //                add("res://game.pck")
+            }
+        }
+    }
+
+    private val mGodotPlugin: GodotPlugin by lazy {
+        return@lazy object : GodotPlugin(mGodot) {
+            override fun getPluginName(): String = PLUGIN_NAME
+
+            override fun getPluginSignals(): MutableSet<SignalInfo> {
+                return mutableSetOf(SHOW_STRANG)
+            }
+
+            @UsedByGodot
+            fun sendData(string: String) {
+                Log.d(TAG, "sendData")
+                // send to flutter
+                runOnUiThread {
+                    sendEvent(event = mapOf("type" to "takeString", "data" to string))
+                }
             }
         }
     }
@@ -210,8 +230,8 @@ class FlutterGodotPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
                 if (godot != null) {
                     GodotPlugin.emitSignal(
                         godot,
-                        GodotFlutterPlugin.PLUGIN_NAME,
-                        GodotFlutterPlugin.SHOW_STRANG,
+                        PLUGIN_NAME,
+                        SHOW_STRANG,
                         it,
                     )
                 }
@@ -319,5 +339,8 @@ class FlutterGodotPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
         private const val EXTRA_COMMAND_LINE_PARAMS = "command_line_params"
         private const val DEFAULT_WINDOW_ID = 664
         private const val KEY_SHOW_GODOT_VIEW = "SHOW_GODOT_VIEW"
+
+        const val PLUGIN_NAME = "GodotFlutterPlugin"
+        val SHOW_STRANG = SignalInfo("get_stang", String::class.java)
     }
 }
