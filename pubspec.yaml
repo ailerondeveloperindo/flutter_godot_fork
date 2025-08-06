@@ -12,7 +12,6 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  web: ^1.0.0
   plugin_platform_interface: ^2.0.2
   flutter_plugin_android_lifecycle: ^2.0.26
 
@@ -27,14 +26,15 @@ flutter:
       android:
         package: com.wyq0918dev.flutter_godot
         pluginClass: FlutterGodotPlugin
+        dartPluginClass: FlutterGodot
       ios:
-        pluginClass: FlutterGodotPlugin
+        dartPluginClass: FlutterGodot
       linux:
-        pluginClass: FlutterGodotPlugin
+        dartPluginClass: FlutterGodot
       macos:
-        pluginClass: FlutterGodotPlugin
+        dartPluginClass: FlutterGodot
       windows:
-        pluginClass: FlutterGodotPluginCApi
+        dartPluginClass: FlutterGodot
       web:
         pluginClass: FlutterGodotWeb
         fileName: flutter_godot_web.dart
