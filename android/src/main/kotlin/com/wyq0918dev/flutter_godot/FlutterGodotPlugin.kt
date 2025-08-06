@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
+import androidx.annotation.Keep
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -54,6 +55,9 @@ class FlutterGodotPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
     private var initializationContext: Context? = null
 
     private lateinit var mGodotContainer: FrameLayout
+
+    private var eventSink: EventChannel.EventSink? = null
+    private val isListening = AtomicBoolean(false)
 
     private fun initializeGodot(context: Context) {
         Log.v(TAG, "Initializing Godot")
@@ -131,12 +135,17 @@ class FlutterGodotPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
                 return mutableSetOf(SHOW_STRANG)
             }
 
+            @Keep
             @UsedByGodot
             fun sendData(string: String) {
                 Log.d(TAG, "sendData")
-                // send to flutter
                 runOnUiThread {
-                    sendEvent(event = mapOf("type" to "takeString", "data" to string))
+                    sendEvent(
+                        event = mapOf(
+                            "type" to "takeString",
+                            "data" to string,
+                        ),
+                    )
                 }
             }
         }
@@ -145,10 +154,7 @@ class FlutterGodotPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
     private val mObserver: DefaultLifecycleObserver = object : DefaultLifecycleObserver {
         override fun onCreate(owner: LifecycleOwner) {
             super.onCreate(owner)
-
-            Log.v(TAG, "onCreate")
             mHost.godot.onCreate(mHost)
-
             if (mHost.godot.onInitNativeLayer(mHost)) {
                 mHost.godot.onInitRenderView(
                     host = mHost, providedContainerLayout = mGodotContainer
@@ -158,58 +164,48 @@ class FlutterGodotPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
 
         override fun onStart(owner: LifecycleOwner) {
             super.onStart(owner)
-            Log.v(TAG, "onStart")
             mHost.godot.onStart(mHost)
         }
 
         override fun onResume(owner: LifecycleOwner) {
             super.onResume(owner)
-            Log.v(TAG, "onResume")
             mHost.godot.onResume(mHost)
         }
 
         override fun onPause(owner: LifecycleOwner) {
             super.onPause(owner)
-            Log.v(TAG, "onPause")
             mHost.godot.onPause(mHost)
         }
 
         override fun onStop(owner: LifecycleOwner) {
             super.onStop(owner)
-            Log.v(TAG, "onStop")
             mHost.godot.onStop(mHost)
         }
 
         override fun onDestroy(owner: LifecycleOwner) {
             super.onDestroy(owner)
-            Log.v(TAG, "onDestroy")
             mHost.godot.onDestroy(mHost)
         }
     }
 
-    private val mFactory = object : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
+    private val mFactory: PlatformViewFactory by lazy {
+        return@lazy object : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
+            override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
+                mGodotContainer = FrameLayout(context).apply {
+                    id = viewId
+                }
+                return object : PlatformView {
 
-        override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
-            mGodotContainer = FrameLayout(context)
-            mGodotContainer.id = viewId
-            return object : PlatformView {
-
-                init {
-                    if (mGodot != null && initializationContext != context) {
-                        Log.v(TAG, "Recreating Godot")
-                        mHost.onNewGodotInstanceRequested(emptyArray())
-                    } else {
-                        mLifecycle?.addObserver(mObserver)
+                    init {
+                        if (mGodot != null && initializationContext != context) {
+                            mHost.onNewGodotInstanceRequested(emptyArray())
+                        } else {
+                            mLifecycle?.addObserver(mObserver)
+                        }
                     }
-                }
 
-                override fun getView(): View {
-                    return mGodotContainer
-                }
-
-                override fun dispose() {
-                    Log.v(TAG, "dispose")
-                    mHost.godot.destroyAndKillProcess()
+                    override fun getView(): View = mGodotContainer
+                    override fun dispose() = mGodot?.destroyAndKillProcess() ?: Unit
                 }
             }
         }
@@ -286,8 +282,7 @@ class FlutterGodotPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
     }
 
 
-    private var eventSink: EventChannel.EventSink? = null
-    private val isListening = AtomicBoolean(false)
+
 
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
         Log.d(TAG, "onListen -> starting listening")
@@ -314,7 +309,7 @@ class FlutterGodotPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
     }
 
 
-    internal fun sendEvent(event: Map<String, Any?>) {
+    private fun sendEvent(event: Map<String, Any?>) {
         if (!isListening.get()) {
             Log.w(TAG, "Attempted to send event while not listening: $event")
             return
