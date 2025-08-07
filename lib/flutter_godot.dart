@@ -2,7 +2,6 @@
 library;
 
 import 'dart:async';
-import 'dart:io' show Platform;
 
 import 'package:flutter/widgets.dart';
 
@@ -20,11 +19,7 @@ final class FlutterGodot implements FlutterGodotPlatform {
   /// 注册 flutter_godot 插件.
   /// 插件注册由 Flutter 框架接管请勿手动注册.
   static void registerWith() {
-    if (Platform.isAndroid) {
-      FlutterGodotPlatform.instance = MethodChannelFlutterGodot();
-    } else {
-      FlutterGodotPlatform.instance = FlutterGodotUnsupported();
-    }
+    FlutterGodotPlatform.instance = MethodChannelFlutterGodot();
   }
 
   /// 发送数据到 Godot
@@ -45,5 +40,16 @@ final class FlutterGodot implements FlutterGodotPlatform {
   @override
   Widget ofPlayer({required BuildContext context}) {
     return FlutterGodotPlatform.instance.ofPlayer(context: context);
+  }
+}
+
+/// 为不支持的平台提供兼容处理
+final class FlutterGodotCompat {
+  const FlutterGodotCompat();
+
+  /// 注册 flutter_godot 插件.
+  /// 插件注册由 Flutter 框架接管请勿手动注册.
+  static void registerWith() {
+    FlutterGodotPlatform.instance = FlutterGodotUnsupported();
   }
 }

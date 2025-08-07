@@ -28,13 +28,13 @@ flutter:
         pluginClass: FlutterGodotPlugin
         dartPluginClass: FlutterGodot
       ios:
-        dartPluginClass: FlutterGodot
+        dartPluginClass: FlutterGodotCompat
       linux:
-        dartPluginClass: FlutterGodot
+        dartPluginClass: FlutterGodotCompat
       macos:
-        dartPluginClass: FlutterGodot
+        dartPluginClass: FlutterGodotCompat
       windows:
-        dartPluginClass: FlutterGodot
+        dartPluginClass: FlutterGodotCompat
       web:
         pluginClass: FlutterGodotWeb
         fileName: flutter_godot_web.dart
