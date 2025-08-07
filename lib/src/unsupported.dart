@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 
 import 'platform_interface.dart';
-import 'typed.dart';
+import 'listen_callback.dart';
 
 final class FlutterGodotUnsupported extends FlutterGodotPlatform {
   FlutterGodotUnsupported();
@@ -14,7 +14,9 @@ final class FlutterGodotUnsupported extends FlutterGodotPlatform {
   }
 
   @override
-  void sendDataToGodot({required String data}) {}
+  void sendDataToGodot({required String data}) {
+    return debugPrint(data);
+  }
 
   @override
   Widget ofPlayer({required BuildContext context}) {

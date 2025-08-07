@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'method_channel.dart';
-import 'typed.dart';
+import 'listen_callback.dart';
 
 abstract class FlutterGodotPlatform extends PlatformInterface {
   FlutterGodotPlatform() : super(token: _token);
@@ -27,10 +27,10 @@ abstract class FlutterGodotPlatform extends PlatformInterface {
   StreamSubscription<dynamic> listenGodotData({
     required GodotListenCallback callback,
   }) {
-    throw UnimplementedError('接口 listenGodotData() 未实现');
+    throw UnimplementedError('接口 listenGodotData() 未实现.');
   }
 
   Widget ofPlayer({required BuildContext context}) {
-    throw UnimplementedError('接口 ofPlayer() 未实现');
+    throw UnimplementedError('接口 ofPlayer() 未实现.');
   }
 }

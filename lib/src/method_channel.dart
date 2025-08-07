@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'platform_interface.dart';
-import 'typed.dart';
+import 'listen_callback.dart';
 
 final class MethodChannelFlutterGodot extends FlutterGodotPlatform {
   MethodChannelFlutterGodot();
