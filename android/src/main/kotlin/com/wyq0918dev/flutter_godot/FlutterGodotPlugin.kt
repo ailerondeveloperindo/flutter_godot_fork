@@ -63,14 +63,9 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
     override fun onAttachedToEngine(binding: FlutterPluginBinding) {
         Log.d(TAG, "onAttachedToEngine")
         mBinding = binding
-
         mMethodChannel = MethodChannel(binding.binaryMessenger, "flutter_godot_method")
         mEventChannel = EventChannel(binding.binaryMessenger, "flutter_godot_event")
-
-        binding.platformViewRegistry.registerViewFactory(
-            "godot-player", mFactory
-        )
-
+        binding.platformViewRegistry.registerViewFactory("godot-player", mFactory)
         mEventChannel.setStreamHandler(this@FlutterGodotPlugin)
         mMethodChannel.setMethodCallHandler(this@FlutterGodotPlugin)
     }
@@ -85,7 +80,6 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         Log.d(TAG, "onAttachedToActivity")
         mActivity = binding.activity
         mLifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding)
-
         val params = binding.activity.intent.getStringArrayExtra(EXTRA_COMMAND_LINE_PARAMS)
         commandLineParams.addAll(params ?: emptyArray())
         if (params != null) {
@@ -112,7 +106,6 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        Log.d(TAG, "onMethodCall ${call.method}")
         when (call.method) {
             "sendData2Godot" -> call.argument<String>("data")?.let {
                 Log.d(TAG, "Received data from flutter... passing to godot")
@@ -129,15 +122,6 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
             } ?: run {
                 Log.e(TAG, "MISSING_DATA")
                 result.error("MISSING_DATA", "Data argument is missing", null)
-            }
-
-            "getIntentData" -> {
-                val intent = mActivity!!.intent
-                val bundle = intent.extras
-                val data = bundle?.let {
-                    mapOf("showGodotView" to it.getBoolean(KEY_SHOW_GODOT_VIEW, false))
-                } ?: emptyMap<String, Any?>()
-                result.success(data)
             }
 
             else -> result.notImplemented()
