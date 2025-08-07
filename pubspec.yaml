@@ -5,7 +5,7 @@ repository: https://github.com/wyq0918dev/flutter_godot
 
 environment:
   sdk: ^3.8.1
-  flutter: '>=3.3.0'
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:

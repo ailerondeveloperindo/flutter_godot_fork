@@ -25,7 +25,6 @@ apply plugin: "org.jetbrains.kotlin.android"
 
 android {
     namespace = "com.wyq0918dev.flutter_godot"
-
     compileSdk = 36
 
     compileOptions {
@@ -33,16 +32,16 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
-    }
-
     defaultConfig {
         minSdk = 21
+        aaptOptions {
+            ignoreAssetsPattern "!.svn:!.git:!.gitignore:!.ds_store:!*.scc:<dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"
+        }
     }
 
     dependencies {
         implementation("androidx.annotation:annotation:1.9.1")
+        //noinspection Aligned16KB
         implementation("org.godotengine:godot:4.4.1.stable")
         testImplementation("org.jetbrains.kotlin:kotlin-test:2.2.0")
         testImplementation("org.mockito:mockito-core:5.18.0")
