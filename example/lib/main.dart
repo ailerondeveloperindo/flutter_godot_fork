@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_godot/flutter_godot.dart';
-import 'package:freefeos/freefeos.dart';
 
 void main() => runApp(const MyApp());
 
@@ -20,7 +19,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Godot',
-      builder: FreeFEOS.builder,
       theme: ThemeData(
         brightness: Brightness.light,
         colorScheme: ColorScheme.fromSeed(
@@ -76,11 +74,6 @@ class _HomePageState extends State<HomePage> {
           child: godot.ofPlayer(context: context),
         ),
         Positioned(
-          right: 0,
-          top: 0,
-          child: SafeArea(child: CapsulePlaceholder()),
-        ),
-        Positioned(
           left: 0,
           bottom: 0,
           child: SafeArea(
@@ -96,18 +89,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
-    );
-  }
-}
-
-final class CapsulePlaceholder extends StatelessWidget {
-  const CapsulePlaceholder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(12.0),
-      child: SizedBox(width: 87.0, height: 32.0),
     );
   }
 }
