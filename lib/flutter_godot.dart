@@ -7,7 +7,6 @@ import 'src/method_channel.dart';
 import 'src/platform_interface.dart';
 import 'src/typed.dart';
 import 'src/unsupported.dart';
-
 export 'src/typed.dart';
 
 final class FlutterGodot implements FlutterGodotPlatform {
