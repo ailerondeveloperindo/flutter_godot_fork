@@ -11,7 +11,7 @@ class FlutterGodotWeb {
   const FlutterGodotWeb();
 
   /// 注册 flutter_godot 插件.
-  /// 插件注册由Flutter框架接管请勿手动注册.
+  /// 插件注册由 Flutter 框架接管请勿手动注册.
   static void registerWith(Registrar _) {
     FlutterGodotPlatform.instance = FlutterGodotUnsupported();
   }

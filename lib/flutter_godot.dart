@@ -18,7 +18,7 @@ final class FlutterGodot implements FlutterGodotPlatform {
   const FlutterGodot();
 
   /// 注册 flutter_godot 插件.
-  /// 插件注册由Flutter框架接管请勿手动注册.
+  /// 插件注册由 Flutter 框架接管请勿手动注册.
   static void registerWith() {
     if (Platform.isAndroid) {
       FlutterGodotPlatform.instance = MethodChannelFlutterGodot();
@@ -27,13 +27,13 @@ final class FlutterGodot implements FlutterGodotPlatform {
     }
   }
 
-  /// 发送数据到Godot
+  /// 发送数据到 Godot
   @override
   void sendDataToGodot({required String data}) {
     return FlutterGodotPlatform.instance.sendDataToGodot(data: data);
   }
 
-  /// 监听Godot发送来的数据
+  /// 监听 Godot 发送来的数据
   @override
   StreamSubscription<dynamic> listenGodotData({
     required GodotListenCallback callback,
