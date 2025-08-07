@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_godot/flutter_godot.dart';
+import 'package:freefeos/freefeos.dart';
 
 void main() => runApp(const MyApp());
 
@@ -14,6 +15,39 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   _MyAppState();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      builder: FreeFEOS.builder,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.purple,
+          brightness: Brightness.light,
+        ),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.purple,
+          brightness: Brightness.dark,
+        ),
+      ),
+      home: const HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  _HomePageState();
 
   StreamSubscription? _eventSubscription;
   final FlutterGodot godot = const FlutterGodot();
@@ -34,28 +68,30 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Stack(
-        children: [
-          godot.ofPlayer(context: context),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      godot.sendDataToGodot(data: '这是Flutter发送到Godot的数据');
-                    },
-                    child: const Text("发送消息到Godot"),
-                  ),
-                ],
+    return Stack(
+      children: [
+        godot.ofPlayer(context: context),
+        SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(12.0),
+                child: SizedBox(width: 87.0, height: 32.0),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    godot.sendDataToGodot(data: '这是Flutter发送到Godot的数据');
+                  },
+                  child: const Text("发送消息到Godot"),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
