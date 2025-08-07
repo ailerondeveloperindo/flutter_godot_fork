@@ -12,7 +12,6 @@ import 'src/unsupported.dart';
 
 export 'src/listen_callback.dart';
 
-/// 将 Godot 游戏作为 Widget 嵌入到 Flutter 应用程序中.
 final class FlutterGodot implements FlutterGodotPlatform {
   const FlutterGodot();
 
@@ -43,12 +42,12 @@ final class FlutterGodot implements FlutterGodotPlatform {
   }
 }
 
-/// 为不支持的平台提供兼容处理
 final class FlutterGodotCompat {
   const FlutterGodotCompat();
 
   /// 注册 flutter_godot 插件.
   /// 插件注册由 Flutter 框架接管请勿手动注册.
+  /// 为不支持的平台提供兼容处理
   static void registerWith() {
     FlutterGodotPlatform.instance = FlutterGodotUnsupported();
   }

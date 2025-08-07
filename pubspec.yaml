@@ -1,5 +1,5 @@
 name: flutter_godot
-description: "Embed a Godot game as a widget in a Flutter app."
+description: "The flutter_godot plugin can embed Godot games as Widget into Flutter applications and support two-way communication."
 version: 0.0.2
 repository: https://github.com/wyq0918dev/flutter_godot
 
