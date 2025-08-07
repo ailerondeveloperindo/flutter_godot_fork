@@ -194,7 +194,8 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
                 Intent().setComponent(ComponentName(mActivity!!, mActivity!!.javaClass.name))
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    .putExtra(EXTRA_COMMAND_LINE_PARAMS, args).putExtra(KEY_SHOW_GODOT_VIEW, true)
+                    .putExtra(EXTRA_COMMAND_LINE_PARAMS, args)
+                    .putExtra(KEY_SHOW_GODOT_VIEW, true)
             godot.destroyAndKillProcess()
             ProcessPhoenix.triggerRebirth(mActivity, Bundle(), intent)
             return DEFAULT_WINDOW_ID
@@ -295,7 +296,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         private const val DEFAULT_WINDOW_ID = 664
         private const val KEY_SHOW_GODOT_VIEW = "SHOW_GODOT_VIEW"
 
-        const val PLUGIN_NAME = "GodotFlutterPlugin"
-        val SHOW_STRANG = SignalInfo("get_stang", String::class.java)
+        private const val PLUGIN_NAME = "GodotFlutterPlugin"
+        private val SHOW_STRANG = SignalInfo("get_stang", String::class.java)
     }
 }
