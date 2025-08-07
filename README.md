@@ -3,6 +3,10 @@
 - 将 Godot 游戏作为 Widget 嵌入到 Flutter 应用程序中.  
 - Embed a Godot game as a widget in a Flutter app.
 
+![Pub Version](https://img.shields.io/pub/v/flutter_godot?style=flat-square&logo=dart&logoColor=white&label=Pub%20Version&color=blue)
+![GitHub Repo stars](https://img.shields.io/github/stars/wyq0918dev/flutter_godot?style=flat-square&logo=github&logoColor=white&label=GitHub%20Stars&color=blue)
+![GitHub License](https://img.shields.io/github/license/wyq0918dev/flutter_godot?style=flat-square&logo=github&logoColor=white&label=GitHub%20License&color=blue)
+
 <img src="https://raw.githubusercontent.com/wyq0918dev/flutter_godot/master/screenshot.png" width="512">
 
 ## 对应版本
