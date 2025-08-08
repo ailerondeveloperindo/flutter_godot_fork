@@ -7,7 +7,7 @@ import 'src/platform_interface.dart';
 import 'src/unsupported.dart';
 
 class FlutterGodotWeb {
-  const FlutterGodotWeb();
+  const FlutterGodotWeb._();
 
   /// 注册 flutter_godot 插件.
   /// 插件注册由 Flutter 框架接管请勿手动注册.

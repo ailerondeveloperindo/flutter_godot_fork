@@ -43,7 +43,7 @@ final class FlutterGodot implements FlutterGodotPlatform {
 }
 
 final class FlutterGodotCompat {
-  const FlutterGodotCompat();
+  const FlutterGodotCompat._();
 
   /// 注册 flutter_godot 插件.
   /// 插件注册由 Flutter 框架接管请勿手动注册.
