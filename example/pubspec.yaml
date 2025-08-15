@@ -2,7 +2,7 @@ name: flutter_godot_example
 description: "Demonstrates how to use the flutter_godot plugin."
 publish_to: "none"
 environment:
-  sdk: ^3.8.1
+  sdk: ^3.9.0
 
 dependencies:
   flutter:
