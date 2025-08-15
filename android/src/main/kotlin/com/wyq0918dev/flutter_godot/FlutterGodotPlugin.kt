@@ -136,14 +136,12 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
     }
 
 
-
     private val mFactory: PlatformViewFactory by lazy {
         return@lazy object : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
             override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
                 return object : PlatformView {
                     init {
-                        val creationParams = args as Map<String, String>?
-                        mAssetName = creationParams?.getValue(key = "asset_name")
+                        mAssetName = getAssetName(args = args)
                         mGodotContainer = FrameLayout(context).apply {
                             id = viewId
                         }
@@ -159,6 +157,11 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
                 }
             }
         }
+    }
+
+    private fun getAssetName(args: Any?): String? {
+//        GodotActivity
+        return (args as? Map<*, *>)?.get(key = ASSET_NAME_KEY) as? String
     }
 
     private val mHost: GodotHost = object : GodotHost {
@@ -283,6 +286,8 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         const val GODOT_VIEW_ID: String = "godot-player"
         const val GODOT_METHOD_ID: String = "flutter_godot_method"
         const val GODOT_EVENT_ID: String = "flutter_godot_event"
+
+        const val ASSET_NAME_KEY = "asset_name"
 
         private const val EXTRA_COMMAND_LINE_PARAMS = "command_line_params"
         private const val DEFAULT_WINDOW_ID = 664
