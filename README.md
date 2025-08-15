@@ -15,6 +15,7 @@ flutter_godot 插件版本 | Godot Engine 版本
 ---- | -----
 0.0.1 | 4.4.1 Stable
 0.0.2 | 4.4.1 Stable
+0.0.3 | 4.4.1 Stable
 
 ## 使用方法
 
