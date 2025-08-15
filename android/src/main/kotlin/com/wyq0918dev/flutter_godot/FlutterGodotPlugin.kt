@@ -57,6 +57,8 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
 
     private val commandLineParams = ArrayList<String>()
 
+    private var mAssetName: String? = null
+
     override fun onAttachedToEngine(binding: FlutterPluginBinding) {
         mMethodChannel = MethodChannel(binding.binaryMessenger, GODOT_METHOD_ID)
         mEventChannel = EventChannel(binding.binaryMessenger, GODOT_EVENT_ID)
@@ -133,7 +135,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         }
     }
 
-    private var mAssetName: String? = null
+
 
     private val mFactory: PlatformViewFactory by lazy {
         return@lazy object : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
@@ -153,9 +155,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
                     }
 
                     override fun getView(): View = mGodotContainer
-                    override fun dispose() {
-//                        mGodot?.destroyAndKillProcess()
-                    }
+                    override fun dispose(): Unit = mGodot?.destroyAndKillProcess() ?: Unit
                 }
             }
         }
