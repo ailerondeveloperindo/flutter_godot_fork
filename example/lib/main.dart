@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _eventSubscription = godot.listenGodotData(
-      callback: (data) => debugPrint('Godot发送来的数据是: $data'),
+      callback: (data) => debugPrint('Flutter: $data'),
     );
   }
 
