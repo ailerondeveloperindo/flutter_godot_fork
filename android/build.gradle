@@ -44,11 +44,9 @@ android {
     }
 
     dependencies {
-        implementation("androidx.annotation:annotation:1.9.1")
         //noinspection Aligned16KB
         implementation("org.godotengine:godot:4.4.1.stable")
-        testImplementation("org.jetbrains.kotlin:kotlin-test:2.2.0")
-        testImplementation("org.mockito:mockito-core:5.18.0")
+        implementation("androidx.annotation:annotation:1.9.1")
     }
 
     testOptions {
