@@ -160,7 +160,6 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
     }
 
     private fun getAssetName(args: Any?): String? {
-//        GodotActivity
         return (args as? Map<*, *>)?.get(key = ASSET_NAME_KEY) as? String
     }
 

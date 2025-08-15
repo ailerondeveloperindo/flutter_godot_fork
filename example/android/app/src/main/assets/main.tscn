@@ -23,31 +23,34 @@ metadata/_edit_use_anchors_ = true
 [node name="Button" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.337963
-anchor_top = 0.578125
-anchor_right = 0.638889
-anchor_bottom = 0.638021
+anchor_left = 0.328704
+anchor_top = 0.552951
+anchor_right = 0.62963
+anchor_bottom = 0.612847
 grow_horizontal = 2
 grow_vertical = 2
 text = "发送消息到Flutter"
 metadata/_edit_use_anchors_ = true
 
 [node name="Label2" type="Label" parent="."]
-layout_mode = 0
-offset_left = 245.0
-offset_top = 349.0
-offset_right = 343.0
-offset_bottom = 372.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.404321
+anchor_top = 0.298611
+anchor_right = 0.555556
+anchor_bottom = 0.318576
+offset_right = -3.05176e-05
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "test test test"
+metadata/_edit_use_anchors_ = true
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.24537
-anchor_top = 0.427083
-anchor_right = 0.762346
-anchor_bottom = 0.494792
+anchor_left = 0.228395
+anchor_top = 0.362847
+anchor_right = 0.74537
+anchor_bottom = 0.430556
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
