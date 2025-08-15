@@ -43,3 +43,8 @@ import 'package:flutter_godot/flutter_godot.dart';
 - 在 Flutter 项目的 Android 平台工程中创建 Assets 文件夹 (android\app\src\main\assets) 并在其中创建 Godot 工程或将现有 Godot 工程放置在其中. (由于 Godot 官方只提供 Android 平台库, 所以此插件仅支持 Android 平台, 并在其他平台做了兼容处理, 不会导致应用崩溃.)
 
 - 实现Godot逻辑 [main.gd](https://github.com/wyq0918dev/flutter_godot/blob/master/example/android/app/src/main/assets/main.gd) 点击查看完整源码
+
+## 已知问题
+
+- Hot Restart 会导致 Godot 不显示.
+- 概率退出后重新打开出现闪退.

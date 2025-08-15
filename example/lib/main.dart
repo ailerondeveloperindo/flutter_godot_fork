@@ -67,28 +67,19 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        ConstrainedBox(
-          constraints: BoxConstraints.expand(),
-          child: godot.ofPlayer(context: context),
-        ),
-        Positioned(
-          left: 0,
-          bottom: 0,
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  godot.sendDataToGodot(data: '这是Flutter发送到Godot的数据');
-                },
-                child: const Text("发送消息到Godot"),
-              ),
-            ),
-          ),
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(title: const Text('Flutter Godot Example')),
+      body: Card.outlined(
+        margin: const EdgeInsets.all(16),
+        child: godot.ofPlayer(context: context),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          godot.sendDataToGodot(data: '这是Flutter发送到Godot的数据');
+        },
+        tooltip: '发送消息到Godot',
+        child: const Icon(Icons.send),
+      ),
     );
   }
 }

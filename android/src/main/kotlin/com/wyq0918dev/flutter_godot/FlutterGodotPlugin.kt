@@ -67,6 +67,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
 
     override fun onDetachedFromEngine(binding: FlutterPluginBinding) {
         mMethodChannel.setMethodCallHandler(null)
+        mEventChannel.setStreamHandler(null)
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
@@ -93,10 +94,9 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         when (call.method) {
             "sendData2Godot" -> call.argument<String>("data")?.let {
                 Log.d(TAG, "Received data from flutter... passing to godot")
-                val godot = mGodot
-                if (godot != null) {
+                if (mGodot != null) {
                     GodotPlugin.emitSignal(
-                        godot,
+                        mGodot,
                         PLUGIN_NAME,
                         SHOW_STRANG,
                         it,
@@ -136,6 +136,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
     private val mFactory: PlatformViewFactory by lazy {
         return@lazy object : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
             override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
+                val creationParams = args as Map<*, *>?
                 return object : PlatformView {
                     init {
                         mGodotContainer = FrameLayout(context).apply {
@@ -149,7 +150,9 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
                     }
 
                     override fun getView(): View = mGodotContainer
-                    override fun dispose() = mGodot?.destroyAndKillProcess() ?: Unit
+                    override fun dispose() {
+//                        mGodot?.destroyAndKillProcess()
+                    }
                 }
             }
         }
