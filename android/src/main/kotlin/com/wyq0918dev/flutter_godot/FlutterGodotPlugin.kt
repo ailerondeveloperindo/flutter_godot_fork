@@ -293,6 +293,6 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         private const val KEY_SHOW_GODOT_VIEW = "SHOW_GODOT_VIEW"
 
         private const val PLUGIN_NAME = "GodotFlutterPlugin"
-        private val SHOW_STRANG = SignalInfo("get_stang", String::class.java)
+        private val SHOW_STRANG = SignalInfo("get_string", String::class.java)
     }
 }

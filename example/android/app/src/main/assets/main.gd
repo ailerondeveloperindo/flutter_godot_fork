@@ -6,7 +6,7 @@ const pluginName: StringName = "GodotFlutterPlugin"
 func _ready():
 	if Engine.has_singleton(pluginName):
 		singleton = Engine.get_singleton(pluginName)
-		singleton.connect("get_stang", example)
+		singleton.connect("get_string", example)
 	else: 
 		print("未找到插件.")
 	pass
