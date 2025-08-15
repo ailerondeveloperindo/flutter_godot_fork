@@ -75,9 +75,10 @@ class _HomePageState extends State<HomePage> {
           child: FlutterGodot.ofPlayer(name: 'assets/game.pck'),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          FlutterGodot.sendDataToGodot(data: '这是Flutter发送到Godot的数据');
+          FlutterGodot.sendDataToGodot(data: '这是Flutter发送到Godot的数据.');
         },
         label: const Text('发送消息到Godot'),
         icon: const Icon(Icons.send),
