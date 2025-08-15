@@ -49,12 +49,11 @@ class _HomePageState extends State<HomePage> {
   _HomePageState();
 
   StreamSubscription? _eventSubscription;
-  final FlutterGodot godot = const FlutterGodot();
 
   @override
   void initState() {
     super.initState();
-    _eventSubscription = godot.listenGodotData(
+    _eventSubscription = FlutterGodot.listenGodotData(
       callback: (data) => debugPrint('Flutter: $data'),
     );
   }
@@ -71,14 +70,17 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(title: const Text('Flutter Godot Example')),
       body: Card.outlined(
         margin: const EdgeInsets.all(16),
-        child: godot.ofPlayer(context: context),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+          child: FlutterGodot.ofPlayer(name: 'assets/game.pck'),
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          godot.sendDataToGodot(data: '这是Flutter发送到Godot的数据');
+          FlutterGodot.sendDataToGodot(data: '这是Flutter发送到Godot的数据');
         },
-        tooltip: '发送消息到Godot',
-        child: const Icon(Icons.send),
+        label: const Text('发送消息到Godot'),
+        icon: const Icon(Icons.send),
       ),
     );
   }

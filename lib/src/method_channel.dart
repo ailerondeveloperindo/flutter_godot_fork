@@ -1,23 +1,20 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import 'godot_player.dart';
 import 'platform_interface.dart';
 import 'listen_callback.dart';
 
 final class MethodChannelFlutterGodot extends FlutterGodotPlatform {
   MethodChannelFlutterGodot();
 
-  static const String _viewType = 'godot-player';
-
   @visibleForTesting
   final MethodChannel methodChannel = const MethodChannel(
     "flutter_godot_method",
   );
+
   @visibleForTesting
   final EventChannel eventStream = const EventChannel("flutter_godot_event");
 
@@ -49,29 +46,7 @@ final class MethodChannelFlutterGodot extends FlutterGodotPlatform {
   }
 
   @override
-  Widget ofPlayer({required BuildContext context}) {
-    return PlatformViewLink(
-      surfaceFactory:
-          (BuildContext context, PlatformViewController controller) {
-            return AndroidViewSurface(
-              controller: controller as AndroidViewController,
-              hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-              gestureRecognizers:
-                  const <Factory<OneSequenceGestureRecognizer>>{},
-            );
-          },
-      onCreatePlatformView: (PlatformViewCreationParams params) {
-        return PlatformViewsService.initExpensiveAndroidView(
-            id: params.id,
-            viewType: _viewType,
-            layoutDirection: TextDirection.ltr,
-            creationParamsCodec: const StandardMessageCodec(),
-            onFocus: () => params.onFocusChanged(true),
-          )
-          ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
-          ..create();
-      },
-      viewType: _viewType,
-    );
+  Widget ofPlayer({String? name, String? package}) {
+    return GodotPlayer(name: name, package: package);
   }
 }

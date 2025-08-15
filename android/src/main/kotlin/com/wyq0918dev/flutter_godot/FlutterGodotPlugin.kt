@@ -133,12 +133,15 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         }
     }
 
+    private var mAssetName: String? = null
+
     private val mFactory: PlatformViewFactory by lazy {
         return@lazy object : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
             override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
-                val creationParams = args as Map<*, *>?
                 return object : PlatformView {
                     init {
+                        val creationParams = args as Map<String, String>?
+                        mAssetName = creationParams?.getValue(key = "asset_name")
                         mGodotContainer = FrameLayout(context).apply {
                             id = viewId
                         }
@@ -190,8 +193,11 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
 
         override fun getCommandLine(): List<String?>? {
             return arrayListOf<String?>().apply {
-//                addAll(arrayListOf())
                 addAll(commandLineParams)
+                mAssetName?.let { asset ->
+                    add("--main-pack")
+                    add(asset)
+                }
             }
         }
     }
@@ -272,6 +278,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
     private companion object {
         /** 日志标签 */
         const val TAG = "FlutterGodotPlugin"
+
         /** 视图ID */
         const val GODOT_VIEW_ID: String = "godot-player"
         const val GODOT_METHOD_ID: String = "flutter_godot_method"

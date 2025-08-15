@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_godot/src/listen_callback.dart';
 import 'package:flutter_godot/src/method_channel.dart';
 import 'package:flutter_godot/src/platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_godot/flutter_godot.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockFlutterGodotPlatform
@@ -16,7 +16,7 @@ class MockFlutterGodotPlatform
   }
 
   @override
-  Widget ofPlayer({required BuildContext context}) {
+  Widget ofPlayer({String? name, String? package}) {
     return const Placeholder();
   }
 

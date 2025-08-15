@@ -30,7 +30,7 @@ abstract class FlutterGodotPlatform extends PlatformInterface {
     throw UnimplementedError('接口 listenGodotData() 未实现.');
   }
 
-  Widget ofPlayer({required BuildContext context}) {
+  Widget ofPlayer({String? name, String? package}) {
     throw UnimplementedError('接口 ofPlayer() 未实现.');
   }
 }
