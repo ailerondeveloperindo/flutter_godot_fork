@@ -1,5 +1,7 @@
 # flutter_godot (English)
 
+README Language: [简体中文](https://github.com/wyq0918dev/flutter_godot/blob/master/README.md) [English](https://github.com/wyq0918dev/flutter_godot/blob/master/README.en.md)
+
 The `flutter_godot` plugin allows you to embed Godot games as Widgets in Flutter applications, supporting two-way communication between Flutter and Godot.
 
 ![Pub Version](https://img.shields.io/pub/v/flutter_godot?style=flat-square&logo=dart&logoColor=white&label=Pub%20Version&color=blue)
@@ -19,30 +21,32 @@ The `flutter_godot` plugin allows you to embed Godot games as Widgets in Flutter
 ## Usage
 
 1. Create a new Flutter project or use an existing one.
+
 2. Add the dependency in your `pubspec.yaml`:
 
-```yaml
-dependencies:
-  flutter_godot: ^latest
-```
+    ```yaml
+    dependencies:
+      flutter_godot: ^latest
+    ```
 
 3. Update dependencies:
 
-```shell
-flutter pub get
-```
+    ```shell
+    flutter pub get
+    ```
 
 4. Import the package in your code:
 
-```dart
-import 'package:flutter_godot/flutter_godot.dart';
-```
+    ```dart
+    import 'package:flutter_godot/flutter_godot.dart';
+    ```
 
 5. There are two development modes for Godot projects:
    - **Integrated Mode**: Create an `assets` folder in your Flutter project's Android platform (`android/app/src/main/assets`) and place your Godot project there, or move an existing Godot project into it.
    - **Standalone Mode**: Manage the Godot project separately, export the `.pck` or `.zip` package, and place it in the Flutter project's `assets` folder. Specify the exported package's path and filename in your code.
 
 6. Implement Flutter logic ([main.dart](https://github.com/wyq0918dev/flutter_godot/blob/master/example/lib/main.dart))
+
 7. Implement Godot logic ([main.gd](https://github.com/wyq0918dev/flutter_godot/blob/master/example/android/app/src/main/assets/main.gd))
 
 ## Known Issues
