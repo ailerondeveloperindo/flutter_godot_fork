@@ -22,7 +22,7 @@ flutter_godot 插件版本 | Flutter 版本 | Godot Engine 版本
 
 1. 新建 Flutter 项目, 或使用现有 Flutter 项目.
 
-2. 在 pubspec.yaml 中添加依赖
+2. 在 `pubspec.yaml` 中添加依赖
 
     ```yaml
     dependencies:
@@ -43,13 +43,13 @@ flutter_godot 插件版本 | Flutter 版本 | Godot Engine 版本
 
 5. Godot 工程有两种开发模式:
 
-    - `集成模式`: 在 Flutter 项目的 Android 平台工程中创建 Assets 文件夹(android\app\src\main\assets) 并在其中创建 Godot 工程或将现有 Godot 工程放置在其中.
+    - **集成模式**: 在 Flutter 项目的 Android 平台工程中创建 `assets` 文件夹 (`android\app\src\main\assets`) 并在其中创建 Godot 工程或将现有 Godot 工程放置在其中.
 
-    - `独立模式`: 将 Godot 工程作为独立的工程单独管理, 然后导出pck/zip包, 并放入flutter项目的assets文件夹中, 并在代码中指定导出的包的路径及文件名.
+    - **独立模式**: 将 Godot 工程作为独立的工程单独管理, 然后导出 `.pck` 或 `.zip` 包, 并放入 flutter 项目的 `assets` 文件夹中, 并在代码中指定导出的包的路径及文件名.
 
 6. 实现 Flutter 逻辑 [main.dart](https://github.com/wyq0918dev/flutter_godot/blob/master/example/lib/main.dart) (点击查看完整源码)
 
-7. 实现Godot逻辑 [main.gd](https://github.com/wyq0918dev/flutter_godot/blob/master/example/android/app/src/main/assets/main.gd) (点击查看完整源码)
+7. 实现 Godot 逻辑 [main.gd](https://github.com/wyq0918dev/flutter_godot/blob/master/example/android/app/src/main/assets/main.gd) (点击查看完整源码)
 
 ## 已知问题
 
