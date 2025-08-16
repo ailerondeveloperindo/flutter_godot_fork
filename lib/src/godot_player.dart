@@ -35,7 +35,7 @@ class GodotPlayer extends StatelessWidget {
                       ? {'asset_name': 'res://flutter_assets/$name'}
                       : {
                           'asset_name':
-                              'res://flutter_assets/package/$package/$name',
+                              'res://flutter_assets/packages/$package/$name',
                         }
                 : null,
             onFocus: () => params.onFocusChanged(true),
