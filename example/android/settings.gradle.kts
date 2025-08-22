@@ -22,4 +22,5 @@ plugins {
     id("org.jetbrains.kotlin.android") version "2.2.10" apply false
 }
 
+rootProject.name = "flutter_godot"
 include(":app")

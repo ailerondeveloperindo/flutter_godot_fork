@@ -25,6 +25,7 @@ import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
 import org.godotengine.godot.Godot
 import org.godotengine.godot.GodotHost
+import org.godotengine.godot.error.Error
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
@@ -68,7 +69,9 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
     /** 资产名称 */
     private var mAssetName: String? = null
 
-    private var parentHost: GodotHost? = null
+    private var mParentHost: GodotHost? = null
+
+    private var mCurrentIntent: Intent? = null
 
     /***
      * 插件附加到 Flutter 引擎
@@ -103,6 +106,8 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         mActivity = binding.activity
         mLifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding)
 
+        mCurrentIntent = binding.activity.intent
+
         commandLineParams.addAll(
             elements = binding.activity.intent.getStringArrayExtra(
                 EXTRA_COMMAND_LINE_PARAMS
@@ -110,12 +115,20 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         )
 
         if (binding.activity is GodotHost) {
-            parentHost = binding.activity as GodotHost
+            mParentHost = binding.activity as GodotHost
         }
 
         binding.addRequestPermissionsResultListener { requestCode, permissions, grantResults ->
             mHost.godot.onRequestPermissionsResult(requestCode, permissions, grantResults)
             return@addRequestPermissionsResultListener true
+        }
+        binding.addActivityResultListener { requestCode, resultCode, data ->
+            mHost.godot.onActivityResult(requestCode, resultCode, data)
+            return@addActivityResultListener true
+        }
+        binding.addOnNewIntentListener { intent ->
+            mCurrentIntent = intent
+            return@addOnNewIntentListener true
         }
     }
 
@@ -139,6 +152,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
     override fun onDetachedFromActivity() {
         mActivity = null
         mLifecycle = null
+        mParentHost = null
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -241,18 +255,80 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
             return mutableSetOf<GodotPlugin>().apply {
                 addAll(elements = super.getHostPlugins(engine))
                 add(element = mGodotPlugin)
+                mParentHost?.let { host ->
+                    addAll(elements = host.getHostPlugins(engine))
+                }
             }
         }
 
         override fun getCommandLine(): List<String?>? {
             return mutableListOf<String?>().apply {
                 addAll(elements = super.getCommandLine())
+                mParentHost?.let { host ->
+                    addAll(elements = host.commandLine)
+                }
                 addAll(elements = commandLineParams)
                 mAssetName?.let { asset ->
                     add(element = "--main-pack")
                     add(element = asset)
                 }
             }
+        }
+
+        override fun onGodotSetupCompleted() {
+            super.onGodotSetupCompleted()
+            mParentHost?.onGodotSetupCompleted()
+        }
+
+        override fun onGodotMainLoopStarted() {
+            super.onGodotMainLoopStarted()
+            mParentHost?.onGodotMainLoopStarted()
+        }
+
+        override fun onGodotForceQuit(instance: Godot?) {
+            super.onGodotForceQuit(instance)
+            mParentHost?.onGodotForceQuit(instance)
+        }
+
+
+        override fun onGodotForceQuit(godotInstanceId: Int): Boolean {
+            return mParentHost != null && mParentHost!!.onGodotForceQuit(godotInstanceId)
+        }
+
+        override fun onGodotRestartRequested(instance: Godot?) {
+            super.onGodotRestartRequested(instance)
+            mParentHost?.onGodotRestartRequested(instance)
+        }
+
+        override fun signApk(
+            inputPath: String,
+            outputPath: String,
+            keystorePath: String,
+            keystoreUser: String,
+            keystorePassword: String
+        ): Error? {
+            return mParentHost?.signApk(
+                inputPath,
+                outputPath,
+                keystorePath,
+                keystoreUser,
+                keystorePassword
+            )
+            return Error.ERR_UNAVAILABLE
+        }
+
+        override fun verifyApk(apkPath: String): Error? {
+            return mParentHost?.verifyApk(apkPath)
+            return Error.ERR_UNAVAILABLE
+        }
+
+        override fun supportsFeature(featureTag: String?): Boolean {
+            return mParentHost?.supportsFeature(featureTag) ?: false
+        }
+
+        override fun onEditorWorkspaceSelected(workspace: String?) {
+            super.onEditorWorkspaceSelected(workspace)
+            mParentHost?.onEditorWorkspaceSelected(workspace)
         }
     }
 
