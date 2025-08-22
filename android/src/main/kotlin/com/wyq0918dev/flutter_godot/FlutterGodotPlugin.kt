@@ -180,7 +180,8 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
                 Intent().setComponent(ComponentName(mActivity!!, mActivity!!.javaClass.name))
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    .putExtra(EXTRA_COMMAND_LINE_PARAMS, args).putExtra(KEY_SHOW_GODOT_VIEW, true)
+                    .putExtra(EXTRA_COMMAND_LINE_PARAMS, args)
+                    .putExtra(KEY_SHOW_GODOT_VIEW, true)
             mHost.godot.destroyAndKillProcess()
             ProcessPhoenix.triggerRebirth(mActivity, Bundle(), intent)
             return DEFAULT_WINDOW_ID
@@ -283,16 +284,21 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
 
         /** 视图ID */
         const val GODOT_VIEW_ID: String = "godot-player"
+
+        /** 方法通道ID */
         const val GODOT_METHOD_ID: String = "flutter_godot_method"
+
+        /** 事件通道ID */
         const val GODOT_EVENT_ID: String = "flutter_godot_event"
 
+        /** 资产名称键 */
         const val ASSET_NAME_KEY = "asset_name"
 
-        private const val EXTRA_COMMAND_LINE_PARAMS = "command_line_params"
-        private const val DEFAULT_WINDOW_ID = 664
-        private const val KEY_SHOW_GODOT_VIEW = "SHOW_GODOT_VIEW"
+        const val EXTRA_COMMAND_LINE_PARAMS = "command_line_params"
+        const val DEFAULT_WINDOW_ID = 664
+        const val KEY_SHOW_GODOT_VIEW = "SHOW_GODOT_VIEW"
 
-        private const val PLUGIN_NAME = "GodotFlutterPlugin"
-        private val SHOW_STRANG = SignalInfo("get_string", String::class.java)
+        const val PLUGIN_NAME = "GodotFlutterPlugin"
+        val SHOW_STRANG = SignalInfo("get_string", String::class.java)
     }
 }
