@@ -10,14 +10,13 @@ import 'listen_callback.dart';
 final class FlutterGodotAndroid extends FlutterGodotPlatform {
   FlutterGodotAndroid();
 
-  @visibleForTesting
   final MethodChannel methodChannel = const MethodChannel(
     "flutter_godot_method",
   );
 
-  @visibleForTesting
   final EventChannel eventStream = const EventChannel("flutter_godot_event");
 
+  /// 发送数据到 Godot
   @override
   void sendDataToGodot({required String data}) {
     return unawaited(
@@ -25,6 +24,7 @@ final class FlutterGodotAndroid extends FlutterGodotPlatform {
     );
   }
 
+  /// 监听 Godot 发送来的数据
   @override
   StreamSubscription<dynamic> listenGodotData({
     required GodotListenCallback callback,
@@ -45,6 +45,7 @@ final class FlutterGodotAndroid extends FlutterGodotPlatform {
     }, onError: (error) => debugPrint(error.toString()));
   }
 
+  /// 游戏播放器
   @override
   Widget ofPlayer({String? name, String? package}) {
     return GodotPlayer(name: name, package: package);
