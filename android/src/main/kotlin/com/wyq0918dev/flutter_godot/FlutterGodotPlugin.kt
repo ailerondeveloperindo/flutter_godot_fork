@@ -188,7 +188,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
             override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
                 return object : PlatformView {
                     init {
-                        mAssetName = getAssetName(args = args)
+                        mAssetName = (args as? Map<*, *>)?.get(key = ASSET_NAME_KEY) as? String
                         mGodotContainer = FrameLayout(context).apply {
                             id = viewId
                         }
@@ -204,10 +204,6 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
                 }
             }
         }
-    }
-
-    private fun getAssetName(args: Any?): String? {
-        return (args as? Map<*, *>)?.get(key = ASSET_NAME_KEY) as? String
     }
 
     private val mHost: GodotHost = object : GodotHost {
