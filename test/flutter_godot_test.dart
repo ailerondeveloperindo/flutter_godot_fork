@@ -20,8 +20,9 @@ final class MockFlutterGodotPlatform extends FlutterGodotPlatform
   }
 
   @override
-  void sendDataToGodot({required String data}) {
+  Future<bool> sendDataToGodot({required String data}) async {
     debugPrint(data);
+    return false;
   }
 }
 

@@ -26,7 +26,7 @@ final class FlutterGodot {
   }
 
   /// 发送数据到 Godot
-  static void sendDataToGodot({required String data}) {
+  static Future<bool> sendDataToGodot({required String data}) {
     return FlutterGodotPlatform.instance.sendDataToGodot(data: data);
   }
 

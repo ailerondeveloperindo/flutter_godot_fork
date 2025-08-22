@@ -18,10 +18,11 @@ final class FlutterGodotAndroid extends FlutterGodotPlatform {
 
   /// 发送数据到 Godot
   @override
-  void sendDataToGodot({required String data}) {
-    return unawaited(
-      methodChannel.invokeMethod("sendData2Godot", {"data": data}),
-    );
+  Future<bool> sendDataToGodot({required String data}) {
+    return methodChannel
+        .invokeMethod<bool>("sendData2Godot", {"data": data})
+        .then((result) => result == true)
+        .catchError((error) => throw FlutterError(error.toString()));
   }
 
   /// 监听 Godot 发送来的数据

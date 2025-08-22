@@ -20,7 +20,7 @@ abstract base class FlutterGodotPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  void sendDataToGodot({required String data}) {
+  Future<bool> sendDataToGodot({required String data}) {
     throw UnimplementedError('接口 sendDataToGodot() 未实现.');
   }
 

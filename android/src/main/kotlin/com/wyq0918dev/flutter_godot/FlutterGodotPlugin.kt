@@ -31,6 +31,7 @@ import org.godotengine.godot.plugin.UsedByGodot
 import org.godotengine.godot.utils.ProcessPhoenix
 import java.util.concurrent.atomic.AtomicBoolean
 
+/** FlutterGodotPlugin */
 class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCallHandler,
     EventChannel.StreamHandler {
 
@@ -48,45 +49,93 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
 
     /** Godot实例 */
     private var mGodot: Godot? = null
+
+    /** 初始化上下文 */
     private var initializationContext: Context? = null
 
+    /** Godot容器 */
     private lateinit var mGodotContainer: FrameLayout
 
-    private var eventSink: EventChannel.EventSink? = null
-    private val isListening = AtomicBoolean(false)
+    /** 事件通道事件接收器 */
+    private var mEventSink: EventChannel.EventSink? = null
 
+    /** 事件通道监听状态 */
+    private val mListeningState = AtomicBoolean(false)
+
+    /** 命令行参数 */
     private val commandLineParams = ArrayList<String>()
 
+    /** 资产名称 */
     private var mAssetName: String? = null
 
+    private var parentHost: GodotHost? = null
+
+    /***
+     * 插件附加到 Flutter 引擎
+     */
     override fun onAttachedToEngine(binding: FlutterPluginBinding) {
+        // 初始化方法通道
         mMethodChannel = MethodChannel(binding.binaryMessenger, GODOT_METHOD_ID)
+        // 初始化事件通道
         mEventChannel = EventChannel(binding.binaryMessenger, GODOT_EVENT_ID)
+        // 注册平台View
         binding.platformViewRegistry.registerViewFactory(GODOT_VIEW_ID, mFactory)
+        // 设置事件通道流处理
         mEventChannel.setStreamHandler(this@FlutterGodotPlugin)
+        // 设置方法通道调用处理
         mMethodChannel.setMethodCallHandler(this@FlutterGodotPlugin)
     }
 
+    /**
+     * 插件从 Flutter 引擎分离
+     */
     override fun onDetachedFromEngine(binding: FlutterPluginBinding) {
+        // 清除方法通道调用处理
         mMethodChannel.setMethodCallHandler(null)
+        // 清除事件通道流处理
         mEventChannel.setStreamHandler(null)
     }
 
+    /**
+     * 插件附加到 Activity
+     */
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         mActivity = binding.activity
         mLifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding)
-        val params = binding.activity.intent.getStringArrayExtra(EXTRA_COMMAND_LINE_PARAMS)
-        commandLineParams.addAll(params ?: emptyArray())
+
+        commandLineParams.addAll(
+            elements = binding.activity.intent.getStringArrayExtra(
+                EXTRA_COMMAND_LINE_PARAMS
+            ) ?: emptyArray()
+        )
+
+        if (binding.activity is GodotHost) {
+            parentHost = binding.activity as GodotHost
+        }
+
+        binding.addRequestPermissionsResultListener { requestCode, permissions, grantResults ->
+            mHost.godot.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            return@addRequestPermissionsResultListener true
+        }
     }
 
+    /**
+     * 插件从 Activity 分离
+     */
     override fun onDetachedFromActivityForConfigChanges() {
         onDetachedFromActivity()
     }
 
+    /**
+     * 插件重新附加到 Activity
+     */
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
         onAttachedToActivity(binding)
     }
 
+    /**
+     * 插件从 Activity 分离
+     */
     override fun onDetachedFromActivity() {
         mActivity = null
         mLifecycle = null
@@ -94,20 +143,19 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "sendData2Godot" -> call.argument<String>("data")?.let {
-                Log.d(TAG, "Received data from flutter... passing to godot")
-                if (mGodot != null) {
-                    GodotPlugin.emitSignal(
-                        mGodot,
-                        PLUGIN_NAME,
-                        SHOW_STRANG,
-                        it,
-                    )
-                }
-                result.success("Data sent to Godot: $it")
-            } ?: run {
-                Log.e(TAG, "MISSING_DATA")
-                result.error("MISSING_DATA", "Data argument is missing", null)
+            "sendData2Godot" -> call.argument<String>("data").let { data ->
+                if (data != null && mGodot != null) GodotPlugin.emitSignal(
+                    mGodot,
+                    PLUGIN_NAME,
+                    SHOW_STRANG,
+                    data,
+                ).run {
+                    result.success(true)
+                } else result.error(
+                    "MISSING_DATA_OR_INSTANCE_NULL",
+                    "缺少数据参数或实例为空",
+                    null,
+                )
             }
 
             else -> result.notImplemented()
@@ -115,23 +163,22 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
     }
 
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-        Log.d(TAG, "onListen -> starting listening")
-        if (events != null) {
-            eventSink = events
-        } else {
-            Log.e(TAG, "onListen -> EventSink is null, cannot setup event listening")
-            return
+        if (events != null) mEventSink = events
+        else {
+            Log.e(TAG, "EventSink 为空")
         }
-        if (isListening.getAndSet(true)) {
-            Log.w(TAG, "Already listening for events, ignoring duplicate request")
+        if (mListeningState.getAndSet(events != null)) {
+            Log.w(TAG, "已在监听事件，忽略重复请求")
             return
         }
     }
 
+    /**
+     * 消息通道取消监听
+     */
     override fun onCancel(arguments: Any?) {
-        Log.d(TAG, "onCancel -> Stopping Godot event listening")
-        if (isListening.getAndSet(false)) {
-            eventSink = null
+        if (mListeningState.getAndSet(false)) {
+            mEventSink = null
         }
     }
 
@@ -164,7 +211,10 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
     }
 
     private val mHost: GodotHost = object : GodotHost {
-        override fun getActivity(): Activity? = mActivity
+
+        override fun getActivity(): Activity {
+            return mActivity!!
+        }
 
         override fun getGodot(): Godot {
             if (mGodot == null) {
@@ -175,39 +225,47 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         }
 
         override fun onNewGodotInstanceRequested(args: Array<String>): Int {
-            Log.d(TAG, "Restarting with parameters ${args.contentToString()}")
-            val intent =
-                Intent().setComponent(ComponentName(mActivity!!, mActivity!!.javaClass.name))
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    .putExtra(EXTRA_COMMAND_LINE_PARAMS, args)
-                    .putExtra(KEY_SHOW_GODOT_VIEW, true)
+            val intent = Intent().apply {
+                setComponent(ComponentName(mActivity!!, mActivity!!.javaClass.name))
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                putExtra(EXTRA_COMMAND_LINE_PARAMS, args)
+                putExtra(KEY_SHOW_GODOT_VIEW, true)
+            }
             mHost.godot.destroyAndKillProcess()
-            ProcessPhoenix.triggerRebirth(mActivity, Bundle(), intent)
+            ProcessPhoenix.triggerRebirth(
+                mActivity,
+                Bundle(),
+                intent,
+            )
             return DEFAULT_WINDOW_ID
         }
 
         override fun getHostPlugins(engine: Godot): MutableSet<GodotPlugin> {
             return mutableSetOf<GodotPlugin>().apply {
-                add(element = mGodotPlugin)
                 addAll(elements = super.getHostPlugins(engine))
+                add(element = mGodotPlugin)
             }
         }
 
         override fun getCommandLine(): List<String?>? {
-            return arrayListOf<String?>().apply {
-                addAll(commandLineParams)
+            return mutableListOf<String?>().apply {
+                addAll(elements = super.getCommandLine())
+                addAll(elements = commandLineParams)
                 mAssetName?.let { asset ->
-                    add("--main-pack")
-                    add(asset)
+                    add(element = "--main-pack")
+                    add(element = asset)
                 }
             }
         }
     }
 
+    /** 生命周期观察者 */
     private val mObserver: DefaultLifecycleObserver = object : DefaultLifecycleObserver {
+
         override fun onCreate(owner: LifecycleOwner) {
             super.onCreate(owner = owner)
+//            GodotFragment
             mHost.godot.onCreate(primaryHost = mHost)
             if (mHost.godot.onInitNativeLayer(host = mHost)) {
                 mHost.godot.onInitRenderView(
@@ -243,9 +301,13 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         }
     }
 
+    /** Godot 插件 */
     private val mGodotPlugin: GodotPlugin by lazy {
         return@lazy object : GodotPlugin(mGodot) {
-            override fun getPluginName(): String = PLUGIN_NAME
+
+            override fun getPluginName(): String {
+                return PLUGIN_NAME
+            }
 
             override fun getPluginSignals(): MutableSet<SignalInfo> {
                 return mutableSetOf(SHOW_STRANG)
@@ -253,28 +315,24 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
 
             @Keep
             @UsedByGodot
-            fun sendData(string: String) {
-                runOnUiThread {
-                    sendEvent(
-                        event = mapOf(
-                            "type" to "takeString",
-                            "data" to string,
-                        ),
-                    )
+            fun sendData(data: String): Unit = runOnUiThread {
+                if (mListeningState.get()) {
+                    try {
+                        mEventSink?.success(
+                            mapOf(
+                                "type" to "takeString",
+                                "data" to data,
+                            )
+                        )
+                    } catch (e: Exception) {
+                        mEventSink?.error(
+                            "GODOT_EVENT_ERROR",
+                            e.message,
+                            null,
+                        )
+                    }
                 }
             }
-        }
-    }
-
-    private fun sendEvent(event: Map<String, Any?>) {
-        if (!isListening.get()) {
-            Log.w(TAG, "Attempted to send event while not listening: $event")
-            return
-        }
-        try {
-            eventSink?.success(event)
-        } catch (e: Exception) {
-            eventSink?.error("GODOT_EVENT_ERROR", e.message, null)
         }
     }
 
