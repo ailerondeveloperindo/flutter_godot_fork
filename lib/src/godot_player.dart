@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-class GodotPlayer extends StatelessWidget {
+final class GodotPlayer extends StatelessWidget {
   const GodotPlayer({super.key, this.name, this.package});
 
   final String? name;

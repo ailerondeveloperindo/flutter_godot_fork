@@ -12,10 +12,10 @@ func _ready():
 	pass
 
 func _on_button_button_down():
-	if singleton != null:
+	if Engine.has_singleton(pluginName):
 		singleton.sendData("这是Godot发送到Flutter的数据.")
 	else:
-		print("插件实例为空.")
+		print("未找到插件.")
 	pass
 
 func example(data: String):

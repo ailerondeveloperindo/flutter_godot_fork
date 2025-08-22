@@ -15,7 +15,7 @@ final class FlutterGodotUnsupported extends FlutterGodotPlatform {
 
   @override
   void sendDataToGodot({required String data}) {
-    return debugPrint(data);
+    return debugPrint('unsupported platform: $data');
   }
 
   @override

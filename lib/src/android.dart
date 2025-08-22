@@ -7,8 +7,8 @@ import 'godot_player.dart';
 import 'platform_interface.dart';
 import 'listen_callback.dart';
 
-final class MethodChannelFlutterGodot extends FlutterGodotPlatform {
-  MethodChannelFlutterGodot();
+final class FlutterGodotAndroid extends FlutterGodotPlatform {
+  FlutterGodotAndroid();
 
   @visibleForTesting
   final MethodChannel methodChannel = const MethodChannel(

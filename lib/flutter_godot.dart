@@ -5,10 +5,16 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
-import 'src/method_channel.dart';
+import 'src/android.dart';
 import 'src/platform_interface.dart';
 import 'src/listen_callback.dart';
 import 'src/unsupported.dart';
+
+/// 导出监听数据的回调
+export 'src/listen_callback.dart';
+
+/// 不支持的平台做兼容处理
+part 'flutter_godot_compat.dart';
 
 final class FlutterGodot {
   const FlutterGodot._();
@@ -16,7 +22,7 @@ final class FlutterGodot {
   /// 注册 flutter_godot 插件.
   /// 插件注册由 Flutter 框架接管请勿手动注册.
   static void registerWith() {
-    FlutterGodotPlatform.instance = MethodChannelFlutterGodot();
+    FlutterGodotPlatform.instance = FlutterGodotAndroid();
   }
 
   /// 发送数据到 Godot
@@ -34,16 +40,5 @@ final class FlutterGodot {
   /// 游戏播放器
   static Widget ofPlayer({String? name, String? package}) {
     return FlutterGodotPlatform.instance.ofPlayer(name: name, package: package);
-  }
-}
-
-final class FlutterGodotCompat {
-  const FlutterGodotCompat._();
-
-  /// 注册 flutter_godot 插件.
-  /// 插件注册由 Flutter 框架接管请勿手动注册.
-  /// 为不支持的平台提供兼容处理
-  static void registerWith() {
-    FlutterGodotPlatform.instance = FlutterGodotUnsupported();
   }
 }

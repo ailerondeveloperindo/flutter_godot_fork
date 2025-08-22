@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'method_channel.dart';
 import 'listen_callback.dart';
+import 'unsupported.dart';
 
-abstract class FlutterGodotPlatform extends PlatformInterface {
+abstract base class FlutterGodotPlatform extends PlatformInterface {
   FlutterGodotPlatform() : super(token: _token);
 
   static final Object _token = Object();
 
-  static FlutterGodotPlatform _instance = MethodChannelFlutterGodot();
+  static FlutterGodotPlatform _instance = FlutterGodotUnsupported();
 
   static FlutterGodotPlatform get instance => _instance;
 
