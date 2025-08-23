@@ -1,7 +1,7 @@
 extends Control
 
 var singleton
-const pluginName: StringName = "GodotFlutterPlugin"
+const pluginName: StringName = "flutter_godot"
 
 func _ready():
 	if Engine.has_singleton(pluginName):

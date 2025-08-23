@@ -71,8 +71,6 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
 
     private var mParentHost: GodotHost? = null
 
-    private var mCurrentIntent: Intent? = null
-
     /***
      * 插件附加到 Flutter 引擎
      */
@@ -106,17 +104,13 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         mActivity = binding.activity
         mLifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding)
 
-        mCurrentIntent = binding.activity.intent
-
         commandLineParams.addAll(
             elements = binding.activity.intent.getStringArrayExtra(
                 EXTRA_COMMAND_LINE_PARAMS
             ) ?: emptyArray()
         )
 
-        if (binding.activity is GodotHost) {
-            mParentHost = binding.activity as GodotHost
-        }
+        if (binding.activity is GodotHost) mParentHost = binding.activity as GodotHost
 
         binding.addRequestPermissionsResultListener { requestCode, permissions, grantResults ->
             mHost.godot.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -125,10 +119,6 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         binding.addActivityResultListener { requestCode, resultCode, data ->
             mHost.godot.onActivityResult(requestCode, resultCode, data)
             return@addActivityResultListener true
-        }
-        binding.addOnNewIntentListener { intent ->
-            mCurrentIntent = intent
-            return@addOnNewIntentListener true
         }
     }
 
@@ -196,7 +186,6 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         }
     }
 
-
     private val mFactory: PlatformViewFactory by lazy {
         return@lazy object : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
             override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
@@ -235,18 +224,17 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         }
 
         override fun onNewGodotInstanceRequested(args: Array<String>): Int {
-            val intent = Intent().apply {
-                setComponent(ComponentName(mActivity!!, mActivity!!.javaClass.name))
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                putExtra(EXTRA_COMMAND_LINE_PARAMS, args)
-                putExtra(KEY_SHOW_GODOT_VIEW, true)
-            }
             mHost.godot.destroyAndKillProcess()
             ProcessPhoenix.triggerRebirth(
                 mActivity,
                 Bundle(),
-                intent,
+                Intent().apply {
+                    setComponent(ComponentName(mActivity!!, mActivity!!.javaClass.name))
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    putExtra(EXTRA_COMMAND_LINE_PARAMS, args)
+                    putExtra(KEY_SHOW_GODOT_VIEW, true)
+                },
             )
             return DEFAULT_WINDOW_ID
         }
@@ -308,11 +296,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
             keystorePassword: String
         ): Error? {
             return mParentHost?.signApk(
-                inputPath,
-                outputPath,
-                keystorePath,
-                keystoreUser,
-                keystorePassword
+                inputPath, outputPath, keystorePath, keystoreUser, keystorePassword
             )
             return Error.ERR_UNAVAILABLE
         }
@@ -337,7 +321,6 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
 
         override fun onCreate(owner: LifecycleOwner) {
             super.onCreate(owner = owner)
-//            GodotFragment
             mHost.godot.onCreate(primaryHost = mHost)
             if (mHost.godot.onInitNativeLayer(host = mHost)) {
                 mHost.godot.onInitRenderView(
@@ -428,7 +411,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         const val DEFAULT_WINDOW_ID = 664
         const val KEY_SHOW_GODOT_VIEW = "SHOW_GODOT_VIEW"
 
-        const val PLUGIN_NAME = "GodotFlutterPlugin"
+        const val PLUGIN_NAME = "flutter_godot"
         val SHOW_STRANG = SignalInfo("get_string", String::class.java)
     }
 }
