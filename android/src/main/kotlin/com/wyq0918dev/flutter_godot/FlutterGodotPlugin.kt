@@ -69,6 +69,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
     /** 资产名称 */
     private var mAssetName: String? = null
 
+    /** 父级Host */
     private var mParentHost: GodotHost? = null
 
     /***
