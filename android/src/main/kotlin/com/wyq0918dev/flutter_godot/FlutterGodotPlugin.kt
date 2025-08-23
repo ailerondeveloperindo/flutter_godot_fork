@@ -72,6 +72,8 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
     /** 父级Host */
     private var mParentHost: GodotHost? = null
 
+    private val mSignalInfo: SignalInfo = SignalInfo(SIGNAL_NAME, String::class.java)
+
     /***
      * 插件附加到 Flutter 引擎
      */
@@ -152,7 +154,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
                 if (data != null && mGodot != null) GodotPlugin.emitSignal(
                     mGodot,
                     PLUGIN_NAME,
-                    SHOW_STRANG,
+                    mSignalInfo,
                     data,
                 ).run {
                     result.success(true)
@@ -361,14 +363,25 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
     private val mGodotPlugin: GodotPlugin by lazy {
         return@lazy object : GodotPlugin(mGodot) {
 
+            /**
+             * 插件名称
+             */
             override fun getPluginName(): String {
                 return PLUGIN_NAME
             }
 
+            /**
+             * 插件信号
+             */
             override fun getPluginSignals(): MutableSet<SignalInfo> {
-                return mutableSetOf(SHOW_STRANG)
+                return mutableSetOf(mSignalInfo)
             }
 
+            /**
+             * 暴露给 Godot 的接口, 发送数据到 Flutter.
+             *
+             * @param data 数据
+             */
             @Keep
             @UsedByGodot
             fun sendData(data: String): Unit = runOnUiThread {
@@ -392,6 +405,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         }
     }
 
+    /** 私有伴生对象 */
     private companion object {
         /** 日志标签 */
         const val TAG = "FlutterGodotPlugin"
@@ -412,7 +426,10 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         const val DEFAULT_WINDOW_ID = 664
         const val KEY_SHOW_GODOT_VIEW = "SHOW_GODOT_VIEW"
 
+        /** Godot 插件名称 */
         const val PLUGIN_NAME = "flutter_godot"
-        val SHOW_STRANG = SignalInfo("get_string", String::class.java)
+
+        /** Godot 插件信号名称 */
+        const val SIGNAL_NAME = "get_string"
     }
 }
