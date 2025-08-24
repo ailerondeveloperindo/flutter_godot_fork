@@ -8,7 +8,7 @@ The `flutter_godot` plugin allows you to embed Godot games as Widgets in Flutter
 ![GitHub Repo stars](https://img.shields.io/github/stars/wyq0918dev/flutter_godot?style=flat-square&logo=github&logoColor=white&label=GitHub%20Stars&color=blue)
 ![GitHub License](https://img.shields.io/github/license/wyq0918dev/flutter_godot?style=flat-square&logo=github&logoColor=white&label=GitHub%20License)
 
-<img src="https://raw.githubusercontent.com/wyq0918dev/flutter_godot/master/screenshot.png" width="512">
+<img src="https://raw.githubusercontent.com/wyq0918dev/flutter_godot/master/screenshot.png" width="256">
 
 ## Supported Versions
 
