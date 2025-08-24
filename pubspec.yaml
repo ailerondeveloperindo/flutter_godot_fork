@@ -39,11 +39,10 @@ flutter:
         pluginClass: FlutterGodotWeb
         fileName: flutter_godot_web.dart
 
+screenshots:
+  - description: "example app screenshot"
+    path: screenshot.png
+
 topics:
   - godot
   - game
-
-screenshots:
-  - description: example app screenshot
-    path: screenshot.png
-    type: "image/png"
