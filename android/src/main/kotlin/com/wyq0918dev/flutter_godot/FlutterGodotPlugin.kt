@@ -74,7 +74,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
 
     private val mSignalInfo: SignalInfo = SignalInfo(SIGNAL_NAME, String::class.java)
 
-    /** Listen to GodotHost States **/
+    /** Listen to GodotHost States */
     private lateinit var mGodotHostEventChannel: EventChannel
 
     /** GodotHostEventChannel Sink */
@@ -288,11 +288,19 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         override fun onGodotSetupCompleted() {
             super.onGodotSetupCompleted()
             mParentHost?.onGodotSetupCompleted()
+            if(mGodotHostEventSink != null)
+            {
+                mGodotHostEventSink?.success("{\"godotCallback\": \"onGodotSetupCompleted\"}")
+            }
         }
 
         override fun onGodotMainLoopStarted() {
             super.onGodotMainLoopStarted()
             mParentHost?.onGodotMainLoopStarted()
+            if(mGodotHostEventSink != null)
+            {
+                mGodotHostEventSink?.success("{\"godotCallback\": \"onGodotMainLoopStarted\"}")
+            }
         }
 
         override fun onGodotForceQuit(instance: Godot?) {
