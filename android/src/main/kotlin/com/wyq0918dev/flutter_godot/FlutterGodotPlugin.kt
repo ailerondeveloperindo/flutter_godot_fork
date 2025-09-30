@@ -447,7 +447,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         const val GODOT_EVENT_ID: String = "flutter_godot_event"
 
         /** Listen to GodotHost callbacks, e.g MainLoopStarted */
-        const val GODOT_HOST_EVENT_ID: String = "godot_host_event"
+        const val GODOT_HOST_EVENT_ID: String = "godot_host_callback_event"
 
         /** 资产名称键 */
         const val ASSET_NAME_KEY = "asset_name"
