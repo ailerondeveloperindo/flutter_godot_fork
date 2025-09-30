@@ -11,7 +11,9 @@ import android.widget.FrameLayout
 import androidx.annotation.Keep
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.coroutineScope
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -23,6 +25,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
+import kotlinx.coroutines.launch
 import org.godotengine.godot.Godot
 import org.godotengine.godot.GodotHost
 import org.godotengine.godot.error.Error
@@ -288,19 +291,25 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         override fun onGodotSetupCompleted() {
             super.onGodotSetupCompleted()
             mParentHost?.onGodotSetupCompleted()
-            if(mGodotHostEventSink != null)
-            {
-                mGodotHostEventSink?.success("{\"godotCallback\": \"onGodotSetupCompleted\"}")
+            mLifecycle?.coroutineScope?.launch {
+                if(mGodotHostEventSink != null)
+                {
+                    mGodotHostEventSink?.success("{\"godotCallback\": \"onGodotSetupCompleted\"}")
+                }
             }
+
         }
 
         override fun onGodotMainLoopStarted() {
             super.onGodotMainLoopStarted()
             mParentHost?.onGodotMainLoopStarted()
-            if(mGodotHostEventSink != null)
-            {
-                mGodotHostEventSink?.success("{\"godotCallback\": \"onGodotMainLoopStarted\"}")
+            mLifecycle?.coroutineScope?.launch {
+                if(mGodotHostEventSink != null)
+                {
+                    mGodotHostEventSink?.success("{\"godotCallback\": \"onGodotMainLoopStarted\"}")
+                }
             }
+
         }
 
         override fun onGodotForceQuit(instance: Godot?) {
