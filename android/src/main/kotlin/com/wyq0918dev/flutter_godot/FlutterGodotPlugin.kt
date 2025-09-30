@@ -74,6 +74,12 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
 
     private val mSignalInfo: SignalInfo = SignalInfo(SIGNAL_NAME, String::class.java)
 
+    /** Listen to GodotHost States **/
+    private lateinit var mGodotHostEventChannel: EventChannel
+
+    /** GodotHostEventChannel Sink */
+    private var mGodotHostEventSink: EventChannel.EventSink? = null
+
     /***
      * 插件附加到 Flutter 引擎
      */
@@ -82,12 +88,25 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         mMethodChannel = MethodChannel(binding.binaryMessenger, GODOT_METHOD_ID)
         // 初始化事件通道
         mEventChannel = EventChannel(binding.binaryMessenger, GODOT_EVENT_ID)
+        // Initialize mGodotHostEventChannel
+        mGodotHostEventChannel = EventChannel(binding.binaryMessenger, GODOT_HOST_EVENT_ID)
         // 注册平台View
         binding.platformViewRegistry.registerViewFactory(GODOT_VIEW_ID, mFactory)
         // 设置事件通道流处理
         mEventChannel.setStreamHandler(this@FlutterGodotPlugin)
         // 设置方法通道调用处理
         mMethodChannel.setMethodCallHandler(this@FlutterGodotPlugin)
+
+        // Set up GodotEventChannel StreamHandler
+        mGodotHostEventChannel.setStreamHandler(object : EventChannel.StreamHandler {
+            override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+                mGodotHostEventSink = events
+            }
+
+            override fun onCancel(arguments: Any?) {
+                mGodotHostEventSink = null
+            }
+        })
     }
 
     /**
@@ -418,6 +437,9 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
 
         /** 事件通道ID */
         const val GODOT_EVENT_ID: String = "flutter_godot_event"
+
+        /** Listen to GodotHost callbacks, e.g MainLoopStarted */
+        const val GODOT_HOST_EVENT_ID: String = "godot_host_event"
 
         /** 资产名称键 */
         const val ASSET_NAME_KEY = "asset_name"
