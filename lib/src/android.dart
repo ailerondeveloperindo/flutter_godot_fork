@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -15,6 +16,9 @@ final class FlutterGodotAndroid extends FlutterGodotPlatform {
   );
 
   final EventChannel eventStream = const EventChannel("flutter_godot_event");
+
+  final EventChannel godotHostCallbackStream =
+      const EventChannel("godot_host_callback_event");
 
   /// 发送数据到 Godot
   @override
@@ -46,6 +50,24 @@ final class FlutterGodotAndroid extends FlutterGodotPlatform {
     }, onError: (error) => debugPrint(error.toString()));
   }
 
+// onGodotSetupCompleted & onGodotMainLoopStarted
+  @override
+  StreamSubscription<dynamic> listenGodotHostCallbacks({
+    required GodotListenCallback callback,
+  }) {
+    return godotHostCallbackStream.receiveBroadcastStream().listen((dynamic event) {
+      if(event is String)
+      {
+        var godotCallback = jsonDecode(event)["godotCallback"];
+        callback(godotCallback);
+      }
+      else
+      {
+        debugPrint("Unable to get event");
+      }
+
+    }, onError: (error) => debugPrint(error.toString()));
+  }
   /// 游戏播放器
   @override
   Widget ofPlayer({String? name, String? package}) {

@@ -30,6 +30,12 @@ abstract base class FlutterGodotPlatform extends PlatformInterface {
     throw UnimplementedError('接口 listenGodotData() 未实现.');
   }
 
+  StreamSubscription<dynamic> listenGodotHostCallbacks({
+    required GodotListenCallback callback,
+  }) {
+    throw UnimplementedError('listenGodotHostCallbacks is not implemented.');
+  }
+
   Widget ofPlayer({String? name, String? package}) {
     throw UnimplementedError('接口 ofPlayer() 未实现.');
   }
