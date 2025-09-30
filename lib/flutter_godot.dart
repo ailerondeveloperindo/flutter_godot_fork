@@ -37,6 +37,12 @@ final class FlutterGodot {
     return FlutterGodotPlatform.instance.listenGodotData(callback: callback);
   }
 
+  static StreamSubscription<dynamic> listenGodotHostCallbacks({
+    required GodotListenCallback callback,
+  }) {
+    return FlutterGodotPlatform.instance.listenGodotHostCallbacks(callback: callback);
+  }
+
   /// 游戏播放器
   static Widget ofPlayer({String? name, String? package}) {
     return FlutterGodotPlatform.instance.ofPlayer(name: name, package: package);
