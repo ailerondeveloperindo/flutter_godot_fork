@@ -73,7 +73,7 @@ final class FlutterGodotAndroid extends FlutterGodotPlatform {
   }
   /// 游戏播放器
   @override
-  Widget ofPlayer({String? name, String? package, String compositionMode = FlutterGodotAndroid.compositionModeHybrid}) {
+  Widget ofPlayer({String? name, String? package, String? compositionMode = FlutterGodotAndroid.compositionModeHybrid}) {
     return GodotPlayer(name: name, package: package, compositionMode: compositionMode,);
   }
 }

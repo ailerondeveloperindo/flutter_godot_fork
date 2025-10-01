@@ -10,7 +10,7 @@ final class GodotPlayer extends StatelessWidget {
 
   final String? name;
   final String? package;
-  final String compositionMode;
+  final String? compositionMode;
 
   static const String _viewType = 'godot-player';
 
