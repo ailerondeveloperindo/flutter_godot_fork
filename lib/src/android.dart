@@ -20,6 +20,9 @@ final class FlutterGodotAndroid extends FlutterGodotPlatform {
   final EventChannel godotHostCallbackStream =
       const EventChannel("godot_host_callback_event");
 
+  static const String compositionModeHybrid = "hybrid";
+  static const String compositionModeTexture = "texture";
+
   /// 发送数据到 Godot
   @override
   Future<bool> sendDataToGodot({required String data}) {
@@ -70,7 +73,7 @@ final class FlutterGodotAndroid extends FlutterGodotPlatform {
   }
   /// 游戏播放器
   @override
-  Widget ofPlayer({String? name, String? package}) {
-    return GodotPlayer(name: name, package: package);
+  Widget ofPlayer({String? name, String? package, String compositionMode = FlutterGodotAndroid.compositionModeHybrid}) {
+    return GodotPlayer(name: name, package: package, compositionMode: compositionMode,);
   }
 }
