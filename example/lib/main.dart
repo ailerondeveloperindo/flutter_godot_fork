@@ -49,6 +49,7 @@ class _HomePageState extends State<HomePage> {
   _HomePageState();
 
   StreamSubscription? _eventSubscription;
+  StreamSubscription? _godotHostCallbackSubscription;
 
   @override
   void initState() {
@@ -56,6 +57,11 @@ class _HomePageState extends State<HomePage> {
     _eventSubscription = FlutterGodot.listenGodotData(
       callback: (data) => debugPrint('Flutter: $data'),
     );
+
+    _godotHostCallbackSubscription = FlutterGodot.listenGodotHostCallbacks(
+      callback: (data) => debugPrint('Flutter Host Callback: $data'),
+    );
+
   }
 
   @override
