@@ -120,6 +120,7 @@ class FlutterGodotPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCal
         mMethodChannel.setMethodCallHandler(null)
         // 清除事件通道流处理
         mEventChannel.setStreamHandler(null)
+        mGodotHostEventChannel.setStreamHandler(null)
     }
 
     /**
