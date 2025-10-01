@@ -19,6 +19,9 @@ part 'flutter_godot_compat.dart';
 final class FlutterGodot {
   const FlutterGodot._();
 
+  static const String compositionModeHybrid = "hybrid";
+  static const String compositionModeTexture = "texture";
+
   /// 注册 flutter_godot 插件.
   /// 插件注册由 Flutter 框架接管请勿手动注册.
   static void registerWith() {
@@ -44,7 +47,7 @@ final class FlutterGodot {
   }
 
   /// 游戏播放器
-  static Widget ofPlayer({String? name, String? package, String compositionMode = FlutterGodotAndroid.compositionModeHybrid}) {
+  static Widget ofPlayer({String? name, String? package, String compositionMode = FlutterGodot.compositionModeHybrid}) {
     return FlutterGodotPlatform.instance.ofPlayer(name: name, package: package);
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_godot/flutter_godot.dart';
 import 'package:flutter_godot/src/android.dart';
 
 final class GodotPlayer extends StatelessWidget {
@@ -17,9 +18,9 @@ final class GodotPlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (compositionMode){
-      case FlutterGodotAndroid.compositionModeHybrid:
+      case FlutterGodot.compositionModeHybrid:
         return _buildHybirdPlatformView();
-      case FlutterGodotAndroid.compositionModeTexture:
+      case FlutterGodot.compositionModeTexture:
         return _buildTextureAndroidView();
       default:
         return _buildHybirdPlatformView();
