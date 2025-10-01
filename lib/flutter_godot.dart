@@ -44,7 +44,7 @@ final class FlutterGodot {
   }
 
   /// 游戏播放器
-  static Widget ofPlayer({String? name, String? package}) {
+  static Widget ofPlayer({String? name, String? package, String compositionMode = FlutterGodotAndroid.compositionModeHybrid}) {
     return FlutterGodotPlatform.instance.ofPlayer(name: name, package: package);
   }
 }

@@ -36,7 +36,7 @@ abstract base class FlutterGodotPlatform extends PlatformInterface {
     throw UnimplementedError('listenGodotHostCallbacks is not implemented.');
   }
 
-  Widget ofPlayer({String? name, String? package}) {
+  Widget ofPlayer({String? name, String? package, String? compositionMode}) {
     throw UnimplementedError('接口 ofPlayer() 未实现.');
   }
 }

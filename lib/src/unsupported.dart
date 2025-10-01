@@ -20,7 +20,7 @@ final class FlutterGodotUnsupported extends FlutterGodotPlatform {
   }
 
   @override
-  Widget ofPlayer({String? name, String? package}) {
+  Widget ofPlayer({String? name, String? package,  String? compositionMode}) {
     return Container();
   }
 }
